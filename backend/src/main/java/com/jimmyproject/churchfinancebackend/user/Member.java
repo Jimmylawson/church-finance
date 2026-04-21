@@ -16,8 +16,8 @@ import lombok.Setter;
 public class Member extends BaseEntity {
     private String firstName;
     private String lastName;
-    private String email = "";
-    private String phoneNumber = "";
-    private String address = "";
-    private Boolean active = true;
+    private String email;
+    private String phoneNumber;
+    private String address;
+    private boolean active = true;
 }

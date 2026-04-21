@@ -1,0 +1,52 @@
+
+CREATE TABLE users(
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(56) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT true,
+    role VARCHAR(56) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE members
+(
+    id           BIGSERIAL PRIMARY KEY,
+    first_name   VARCHAR(255) NOT NULL,
+    last_name    VARCHAR(255) NOT NULL,
+    email        VARCHAR(255),
+    phone_number VARCHAR(255),
+    address      VARCHAR(255),
+    active       BOOLEAN  NOT NULL DEFAULT true,
+    created_at   TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at   TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE contributions(
+    id BIGSERIAL PRIMARY KEY,
+    amount NUMERIC(19,2) NOT NULL,
+    contribution_type VARCHAR(56) NOT NULL ,
+    payment_method VARCHAR(56) NOT NULL,
+    member_id BIGINT NOT NULL REFERENCES  members(id),
+    description VARCHAR(255),
+    reference VARCHAR(255),
+    date DATE NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+);
+
+
+
+CREATE TABLE expenses(
+    id BIGSERIAL PRIMARY KEY,
+    category VARCHAR(56) NOT NULL,
+    amount NUMERIC(19,2) NOT NULL,
+    payment_method VARCHAR(100) NOT NULL,
+    description VARCHAR(255),
+    reference VARCHAR(255),
+    date DATE NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

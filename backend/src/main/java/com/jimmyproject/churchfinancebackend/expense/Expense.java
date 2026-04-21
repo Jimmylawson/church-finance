@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "expenses")
@@ -27,7 +27,8 @@ public class Expense  extends BaseEntity {
     private Category category;
     private BigDecimal amount;
     @Enumerated(EnumType.STRING)
-    private PaymentMethod paymentMethod = PaymentMethod.DEBIT;
+    private PaymentMethod paymentMethod = PaymentMethod.ZELLE;
     private String description = "";
     private String reference;
+    private LocalDate date;
 }

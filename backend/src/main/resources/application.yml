@@ -3,5 +3,5 @@ spring:
     name: finance-backend
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
 
