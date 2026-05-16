@@ -4,4 +4,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  datasource:
+    url: jdbc:postgresql://localhost:55432/church_finance
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
 
