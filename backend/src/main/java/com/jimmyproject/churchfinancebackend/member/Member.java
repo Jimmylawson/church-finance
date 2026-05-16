@@ -1,4 +1,4 @@
-package com.jimmyproject.churchfinancebackend.user;
+package com.jimmyproject.churchfinancebackend.member;
 
 
 import com.jimmyproject.churchfinancebackend.base.BaseEntity;

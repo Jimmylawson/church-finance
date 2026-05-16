@@ -3,8 +3,7 @@ package com.jimmyproject.churchfinancebackend.contribution;
 
 import com.jimmyproject.churchfinancebackend.base.BaseEntity;
 import com.jimmyproject.churchfinancebackend.enums.ContributionType;
-import com.jimmyproject.churchfinancebackend.enums.PaymentMethod;
-import com.jimmyproject.churchfinancebackend.user.Member;
+import com.jimmyproject.churchfinancebackend.member.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +22,6 @@ public class Contribution  extends BaseEntity {
     private BigDecimal amount;
     @Enumerated(EnumType.STRING)
     private ContributionType contributionType;
-    @Enumerated(EnumType.STRING)
-    private PaymentMethod paymentMethod = PaymentMethod.ZELLE;
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;

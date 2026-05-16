@@ -3,7 +3,6 @@ package com.jimmyproject.churchfinancebackend.expense;
 
 import com.jimmyproject.churchfinancebackend.base.BaseEntity;
 import com.jimmyproject.churchfinancebackend.enums.Category;
-import com.jimmyproject.churchfinancebackend.enums.PaymentMethod;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -26,8 +25,6 @@ public class Expense  extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Category category;
     private BigDecimal amount;
-    @Enumerated(EnumType.STRING)
-    private PaymentMethod paymentMethod = PaymentMethod.ZELLE;
     private String description = "";
     private String reference;
     private LocalDate date;
