@@ -1,5 +1,6 @@
 package com.jimmyproject.churchfinancebackend.expense;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,11 +14,9 @@ public class ExpenseService {
     private final ExpenseRepository expenseRepository;
     private final ExpenseMapper expenseMapper;
 
-    private ExpenseResponse getExpenseById(Long id) {
-        var expense =  expenseRepository.findById(id)
+    private Expense getExpenseById(Long id) {
+       return expenseRepository.findById(id)
                 .orElseThrow(() -> new ExpenseNotFoundException(id));
-
-        return expenseMapper.toResponse(expense);
     }
 
     public ExpenseResponse createExpense(ExpenseRequest request){
@@ -26,7 +25,7 @@ public class ExpenseService {
         return expenseMapper.toResponse(expense);
     }
     public ExpenseResponse getExpense(Long expenseId){
-        return getExpenseById(expenseId);
+        return expenseMapper.toResponse(getExpenseById(expenseId));
     }
     public Page<ExpenseResponse> getAllExpenses(Pageable pageable){
         return expenseRepository.findAll(pageable).map(expenseMapper::toResponse);
@@ -39,5 +38,35 @@ public class ExpenseService {
     }
     public Page<ExpenseResponse> getExpensesByLessThanEqual(LocalDate to, Pageable pageable){
         return expenseRepository.findAllByDateLessThanEqual(to, pageable).map(expenseMapper::toResponse);
+    }
+    @Transactional
+    public void deleteExpense(Long expenseId){
+        getExpenseById(expenseId);
+        expenseRepository.deleteById(expenseId);
+    }
+    @Transactional
+    public ExpenseResponse updateExpense(Long expenseId, ExpenseRequest dto){
+        Expense expense = getExpenseById(expenseId);
+
+        if (dto.getCategory() != null) {
+            expense.setCategory(dto.getCategory());
+        }
+        if (dto.getAmount() != null) {
+            expense.setAmount(dto.getAmount());
+        }
+        if (dto.getDescription() != null) {
+            expense.setDescription(dto.getDescription());
+        }
+        if (dto.getReference() != null) {
+            expense.setReference(dto.getReference());
+        }
+        if (dto.getDate() != null) {
+            expense.setDate(dto.getDate());
+        }
+
+        var savedExpense = expenseRepository.save(expense);
+
+        return expenseMapper.toResponse(savedExpense);
+
     }
 }
