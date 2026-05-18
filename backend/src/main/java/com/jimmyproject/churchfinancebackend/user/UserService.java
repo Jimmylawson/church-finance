@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     private User getUserById(Long userId) {
         return userRepository.findById(userId)
@@ -18,6 +20,7 @@ public class UserService {
     }
 
     public UserResponse createUser(UserRequest request) {
+        request.setPassword(passwordEncoder.encode(request.getPassword()));
         User user = userMapper.toEntity(request);
         user = userRepository.save(user);
         return userMapper.toResponse(user);

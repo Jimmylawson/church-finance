@@ -1,0 +1,72 @@
+If you already understand basic Spring Security, OAuth2 login, and JWT, the next level is not “more auth features.” It is learning how to design secure systems intentionally.
+
+The next level I’d focus on is:
+
+authorization, not just authentication
+who can do what
+method-level security
+resource ownership rules
+role vs permission design
+token lifecycle design
+access token vs refresh token
+rotation
+expiration strategy
+logout/invalidation
+revocation patterns
+secure password and credential handling
+password hashing strategy
+reset flows
+account lock / disable patterns
+secret management
+stateless security architecture in Spring
+custom filters
+SecurityFilterChain design
+exception handling in security
+separating auth endpoints from business endpoints cleanly
+real-world API security concerns
+CORS
+CSRF reasoning
+rate limiting
+brute-force protection
+request validation
+secure error responses
+OAuth2 deeper, beyond “it works”
+authorization code flow
+PKCE
+resource server vs client
+scopes and claims
+OpenID Connect concepts
+database and domain security
+never trusting request IDs blindly
+preventing privilege escalation
+validating access to records
+audit logging
+For your level, the best next step is probably:
+
+learn Spring Security as a resource server properly
+understand JWT claims, authorities, and method-level authorization deeply
+build refresh-token flow correctly
+learn role/permission design
+A strong progression path for you would be:
+
+Build clean admin-only JWT auth for Ledgerly
+Add role/authority checks properly
+Learn refresh token flow
+Learn method security with @PreAuthorize
+Study OAuth2/OIDC deeply after that
+For this project specifically, the next useful skill is:
+
+building a clean Spring Security + JWT architecture from scratch without copying patterns blindly
+That means understanding:
+
+authentication manager
+JWT service
+security filter
+user details service
+security config
+exception entry points
+endpoint protection rules
+If you want one direct answer:
+The next level is authorization design and token lifecycle management.
+
+That is where people usually stop being “someone who can make login work” and start becoming someone who actually understands backend security.
