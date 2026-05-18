@@ -1,7 +1,6 @@
-package com.jimmyproject.churchfinancebackend.config;
+package com.jimmyproject.churchfinancebackend.config.jwt;
 
 
-import com.jimmyproject.churchfinancebackend.config.jwt.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
