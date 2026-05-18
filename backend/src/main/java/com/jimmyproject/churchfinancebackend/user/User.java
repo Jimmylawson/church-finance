@@ -8,6 +8,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.security.AuthProvider;
+
 @Entity
 @Table(name="users")
 @Getter
@@ -22,5 +24,10 @@ public class User extends BaseEntity {
     private boolean enabled = true;
     @Enumerated(EnumType.STRING)
     private ROLE role = ROLE.ROLE_ADMIN;
+
+    public static  User newUser(String firstName, String lastName, String email, String passwordHash, ROLE role) {
+        return new User(firstName, lastName, email, passwordHash,true, role);
+    }
+
 
 }
