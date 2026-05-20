@@ -79,6 +79,7 @@ public class JwtTokenProvider {
         } catch (JwtException | IllegalArgumentException ex) {
             return false;
         }
+
     }
 
     public Instant getExpirationDateFromToken(String token){
