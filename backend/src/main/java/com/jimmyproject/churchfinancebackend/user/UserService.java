@@ -54,7 +54,7 @@ public class UserService {
             user.setEmail(request.getEmail());
         }
         if (request.getPassword() != null) {
-            user.setPassword(request.getPassword());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
         User savedUser = userRepository.save(user);

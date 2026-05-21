@@ -60,8 +60,8 @@ public class AuthController {
     private void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", refreshToken)
                 .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
+                .secure(false)
+                .sameSite("Lax")
                 .path("/v1/api/auth/refresh-token")
                 .maxAge(Duration.ofDays(7))
                 .build();

@@ -49,7 +49,6 @@ public class SecurityConfig {
                                 .requestMatchers("/v1/api/auth/login","/v1/api/auth/register","/v1/api/auth/refresh-token","/v1/api/auth/logout","/oauth2/**","/login/oauth2/**").permitAll()
                                 .anyRequest().authenticated()
                         )
-                .httpBasic(Customizer.withDefaults())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

@@ -40,6 +40,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
+                .setIssuer(jwtProperties.getIssuer())
                 .setExpiration(new Date(System.currentTimeMillis()+ jwtProperties.getAccessExpiration()))
                 .claim("token_type", "access")
                 .signWith(secretKey, SignatureAlgorithm.HS256)

@@ -12,7 +12,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
 
-    private Member getMemberById(Long memberId) {
+    public Member getMemberById(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
     }

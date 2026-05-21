@@ -1,5 +1,6 @@
 package com.jimmyproject.churchfinancebackend.exceptions;
 
+import com.jimmyproject.churchfinancebackend.user.UserAlreadyExistException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,16 @@ public class GlobalExceptionHandler {
                 null
         );
     }
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserExistException(UserAlreadyExistException ex, HttpServletRequest req){
+        return buildErrorResponse(
+                HttpStatus.CONFLICT,
+                ex.getMessage(),
+                req.getRequestURI(),
+                null
+        );
 
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleValidationException(
             MethodArgumentNotValidException exception,
