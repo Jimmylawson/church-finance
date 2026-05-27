@@ -72,8 +72,8 @@ public class AuthController {
     private void clearRefreshTokenCookie(HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("refresh_token", "")
                 .httpOnly(true)
-                .secure(true)
-                .sameSite("None")
+                .secure(false)
+                .sameSite("Lax")
                 .path("/v1/api/auth/refresh-token")
                 .maxAge(0)
                 .build();
