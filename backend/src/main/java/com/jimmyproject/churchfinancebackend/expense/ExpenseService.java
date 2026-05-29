@@ -25,6 +25,7 @@ public class ExpenseService {
         return expenseMapper.toResponse(expense);
     }
     public ExpenseResponse getExpense(Long expenseId){
+
         return expenseMapper.toResponse(getExpenseById(expenseId));
     }
     public Page<ExpenseResponse> getAllExpenses(Pageable pageable){
