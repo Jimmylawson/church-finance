@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ContributionService {
-    private final CustomerRepository customerRepository;
+    private final ContributionRepository contributionRepository;
     private final ContributionMapper contributionMapper;
     private final MemberService memberService;
 
@@ -18,7 +18,7 @@ public class ContributionService {
         Member member = memberService.getMemberById(request.getMemberId());
         var contribution = contributionMapper.toEntity(request);
         contribution.setMember(member);
-        var savedContribution = customerRepository.save(contribution);
+        var savedContribution = contributionRepository.save(contribution);
         return contributionMapper.toResponse(savedContribution);
     }
     //
