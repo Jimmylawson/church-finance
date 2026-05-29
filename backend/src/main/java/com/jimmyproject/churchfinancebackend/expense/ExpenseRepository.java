@@ -32,5 +32,5 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
         select coalesce(sum(e.amount), 0 ) from Expense  e
         where e.date between :startDate and :endDate
 """)
-    BigDecimal getContributionByDateRange(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    BigDecimal getExpensesByDateRange(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }
