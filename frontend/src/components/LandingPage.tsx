@@ -15,7 +15,7 @@ import PreviewSection from "./landing/PreviewSection";
 
 function LandingPage() {
   return (
-    <div className="min-h-screen text-[var(--color-ink)]">
+    <div className="min-h-screen text-[var(--color-ink)] dark:text-slate-100">
       <div className="mx-auto max-w-7xl px-6 pb-20 pt-6 sm:px-8 lg:px-10">
         <Navbar />
         <main>

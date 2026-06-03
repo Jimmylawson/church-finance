@@ -15,10 +15,10 @@ type OverviewCardProps = {
 };
 
 const accentStyles: Record<OverviewCardProps["accent"], string> = {
-  blue: "bg-[var(--color-sky)] text-[var(--color-ocean)]",
-  mint: "bg-[var(--color-mint)] text-emerald-700",
-  peach: "bg-[var(--color-peach)] text-orange-700",
-  butter: "bg-[var(--color-butter)] text-amber-700",
+  blue: "bg-[var(--color-sky)] text-[var(--color-ocean)] dark:text-[#93b3ff]",
+  mint: "bg-[var(--color-mint)] text-emerald-700 dark:text-emerald-300",
+  peach: "bg-[var(--color-peach)] text-orange-700 dark:text-orange-300",
+  butter: "bg-[var(--color-butter)] text-amber-700 dark:text-amber-300",
 };
 
 function OverviewCard({
@@ -29,14 +29,14 @@ function OverviewCard({
   delta,
 }: OverviewCardProps) {
   return (
-    <Card className="border-white/70 bg-white/90 shadow-[0_24px_80px_-48px_rgba(16,35,63,0.45)] backdrop-blur">
+    <Card className="border-white/70 bg-white/90 shadow-[0_24px_80px_-48px_rgba(16,35,63,0.45)] backdrop-blur dark:border-slate-800/80 dark:bg-slate-950/70 dark:shadow-[0_24px_80px_-48px_rgba(0,0,0,0.35)]">
       <CardHeader className="gap-3">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <CardDescription className="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-slate-500">
+            <CardDescription className="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
               {title}
             </CardDescription>
-            <CardTitle className="mt-2 text-3xl font-black tracking-tight text-slate-900">
+            <CardTitle className="mt-2 text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
               {value}
             </CardTitle>
           </div>
@@ -48,7 +48,7 @@ function OverviewCard({
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-slate-600">{helper}</p>
+        <p className="text-sm text-slate-600 dark:text-slate-300">{helper}</p>
       </CardContent>
     </Card>
   );

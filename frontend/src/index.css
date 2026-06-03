@@ -131,6 +131,13 @@ button {
 }
 
 .dark {
+  --color-ink: #eef4ff;
+  --color-mint: #173329;
+  --color-sky: #14284b;
+  --color-peach: #3b251b;
+  --color-butter: #3a3215;
+  --color-paper: #07101d;
+  --color-card: #0f1726;
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -174,4 +181,11 @@ button {
   html {
     @apply font-sans;
   }
+}
+
+.dark body {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(76, 122, 255, 0.18), transparent 26%),
+    radial-gradient(circle at 82% 12%, rgba(182, 198, 255, 0.12), transparent 24%),
+    linear-gradient(180deg, #050914 0%, #091120 52%, #0b1524 100%);
 }

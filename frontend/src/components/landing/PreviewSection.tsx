@@ -8,7 +8,7 @@ type PreviewSectionProps = {
 function PreviewSection({ contributionMix, expenseMix }: PreviewSectionProps) {
   return (
     <section id="preview" className="py-14">
-      <div className="rounded-[2.5rem] bg-[var(--color-ink)] px-6 py-10 text-white shadow-[0_35px_80px_rgba(16,35,63,0.18)] sm:px-8 lg:px-12">
+      <div className="rounded-[2.5rem] bg-[var(--color-ink)] px-6 py-10 text-white shadow-[0_35px_80px_rgba(16,35,63,0.18)] dark:bg-[linear-gradient(145deg,#0d1830_0%,#0b1324_100%)] dark:shadow-[0_35px_80px_rgba(0,0,0,0.35)] sm:px-8 lg:px-12">
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Preview</p>
@@ -21,9 +21,9 @@ function PreviewSection({ contributionMix, expenseMix }: PreviewSectionProps) {
             </p>
           </div>
 
-          <div className="grid gap-4 rounded-[2rem] bg-white/8 p-4 backdrop-blur sm:grid-cols-2">
-            <div className="rounded-[1.5rem] bg-white px-5 py-6 text-[var(--color-ink)]">
-              <p className="text-sm font-semibold text-slate-500">Contribution mix</p>
+          <div className="grid gap-4 rounded-[2rem] bg-white/8 p-4 backdrop-blur dark:bg-white/5 sm:grid-cols-2">
+            <div className="rounded-[1.5rem] bg-white px-5 py-6 text-[var(--color-ink)] dark:bg-slate-950/80 dark:text-slate-100">
+              <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">Contribution mix</p>
               <div className="mt-4 space-y-3">
                 {contributionMix.map((item) => (
                   <div key={item.label} className="flex items-center justify-between">
@@ -33,7 +33,7 @@ function PreviewSection({ contributionMix, expenseMix }: PreviewSectionProps) {
                 ))}
               </div>
             </div>
-            <div className="rounded-[1.5rem] bg-white/10 px-5 py-6">
+            <div className="rounded-[1.5rem] bg-white/10 px-5 py-6 dark:bg-slate-900/45">
               <p className="text-sm font-semibold text-white/70">Expense categories</p>
               <div className="mt-4 space-y-3">
                 {expenseMix.map((item) => (
