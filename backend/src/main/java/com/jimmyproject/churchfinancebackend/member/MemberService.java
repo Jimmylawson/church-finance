@@ -16,6 +16,10 @@ public class MemberService {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
     }
+    public Member getMemberByName(String name){
+        return memberRepository.findByFirstName(name)
+                .orElseThrow(() -> new MemberNotFoundException(name));
+    }
 
     public MemberResponse createMember(MemberRequest request) {
         Member member = memberMapper.toEntity(request);

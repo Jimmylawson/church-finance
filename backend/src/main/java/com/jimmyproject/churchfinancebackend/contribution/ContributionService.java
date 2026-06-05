@@ -21,7 +21,7 @@ public class ContributionService {
     //create contribution
     @Transactional
     public ContributionResponse createContribution(ContributionRequest request){
-        Member member = memberService.getMemberById(request.getMemberId());
+        Member member = memberService.getMemberByName(request.getMemberName());
         var contribution = contributionMapper.toEntity(request);
         contribution.setMember(member);
         var savedContribution = contributionRepository.save(contribution);
