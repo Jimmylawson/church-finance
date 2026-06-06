@@ -17,7 +17,8 @@ public class ContributionResponse {
     private Long id;
     private BigDecimal amount;
     private ContributionType contributionType;
-    private ;
+    private Long memberId;
+    private String memberFullName;
     private String description;
     private String reference;
     private LocalDate date;

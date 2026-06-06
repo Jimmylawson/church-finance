@@ -33,6 +33,14 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getAllMembers(pageable));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Page<MemberResponse>> searchMembers(
+            @RequestParam String query,
+            @PageableDefault(size = 10, sort = "firstName", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
+        return ResponseEntity.ok(memberService.searchMembers(query, pageable));
+    }
+
     @DeleteMapping("/{memberId}")
     public ResponseEntity<Void> deleteMember(@PathVariable Long memberId) {
         memberService.deleteMember(memberId);

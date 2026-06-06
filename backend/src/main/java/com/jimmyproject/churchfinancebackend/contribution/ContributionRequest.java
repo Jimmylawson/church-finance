@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class ContributionRequest {
     private BigDecimal amount;
     private ContributionType contributionType;
-    private String memberName;
+    private Long memberIdn;
     private String description;
     private String reference;
     private LocalDate date;
