@@ -53,3 +53,14 @@ export const getAllMembers = async (
   const response = await api.get(`/members?page=${page}&size=${size}`);
   return response.data;
 };
+
+export const searchMembers = async (
+  query: string,
+  page = 0,
+  size = 10,
+): Promise<PageResponse<MemberResponse>> => {
+  const response = await api.get(
+    `/members/search?query=${encodeURIComponent(query)}&page=${page}&size=${size}`,
+  );
+  return response.data;
+};

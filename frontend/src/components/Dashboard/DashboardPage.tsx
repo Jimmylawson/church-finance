@@ -33,7 +33,9 @@ function DashboardPage() {
             </p>
             <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
               Signed in as{" "}
-              <span className="font-semibold text-slate-700 dark:text-slate-200">Jimmy Lawson</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-200">
+                Jimmy Lawson
+              </span>
             </p>
           </div>
           <div className="flex items-start gap-3">
@@ -164,7 +166,9 @@ function DashboardPage() {
                       <p className="font-semibold text-slate-900 dark:text-slate-100">
                         {item.title}
                       </p>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">{item.subtitle}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">
+                        {item.subtitle}
+                      </p>
                     </div>
                     <span className="font-black text-emerald-700">
                       {item.amount}
@@ -193,7 +197,9 @@ function DashboardPage() {
                       <p className="font-semibold text-slate-900 dark:text-slate-100">
                         {item.title}
                       </p>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">{item.subtitle}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">
+                        {item.subtitle}
+                      </p>
                     </div>
                     <span className="font-black text-orange-700">
                       {item.amount}

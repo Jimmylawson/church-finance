@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { RecentRecord, StatItem } from "../../data/landingPageData";
 
 type HeroSectionProps = {
@@ -25,12 +26,18 @@ function HeroSection({ stats, recentRecords }: HeroSectionProps) {
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <button className="rounded-full bg-[var(--color-ocean)] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(37,90,240,0.28)] transition hover:-translate-y-0.5">
+            <Link
+              to="/dashboard"
+              className="rounded-full bg-[var(--color-ocean)] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(37,90,240,0.28)] transition hover:-translate-y-0.5"
+            >
               Get started
-            </button>
-            <button className="rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-100 dark:hover:bg-slate-900">
+            </Link>
+            <Link
+              to="/dashboard"
+              className="rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-100 dark:hover:bg-slate-900"
+            >
               View dashboard
-            </button>
+            </Link>
           </div>
 
           <div className="mt-10 flex flex-wrap gap-3">

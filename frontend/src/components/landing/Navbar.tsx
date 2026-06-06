@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ModeToggle } from "@/components";
 
 function Navbar() {
@@ -27,12 +28,18 @@ function Navbar() {
 
       <div className="flex items-center gap-3">
         <ModeToggle />
-        <button className="hidden rounded-full px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900 sm:inline-flex">
+        <Link
+          to="/dashboard"
+          className="hidden rounded-full px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-900 sm:inline-flex"
+        >
           Sign in
-        </button>
-        <button className="rounded-full bg-[var(--color-ink)] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(16,35,63,0.18)] transition hover:-translate-y-0.5 dark:bg-[var(--color-ocean)] dark:shadow-[0_18px_40px_rgba(37,90,240,0.24)]">
+        </Link>
+        <Link
+          to="/dashboard"
+          className="rounded-full bg-[var(--color-ink)] px-4 py-2 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(16,35,63,0.18)] transition hover:-translate-y-0.5 dark:bg-[var(--color-ocean)] dark:shadow-[0_18px_40px_rgba(37,90,240,0.24)]"
+        >
           Start free
-        </button>
+        </Link>
       </div>
     </header>
   );
