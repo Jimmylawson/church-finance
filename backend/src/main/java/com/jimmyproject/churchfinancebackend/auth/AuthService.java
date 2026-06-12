@@ -4,9 +4,7 @@ package com.jimmyproject.churchfinancebackend.auth;
 import com.jimmyproject.churchfinancebackend.auth.logins.LoginRequest;
 import com.jimmyproject.churchfinancebackend.auth.logins.LoginResponse;
 import com.jimmyproject.churchfinancebackend.auth.logins.RegisterRequest;
-import com.jimmyproject.churchfinancebackend.config.CustomUserDetailsService;
 import com.jimmyproject.churchfinancebackend.config.CustomerUserDetail;
-import com.jimmyproject.churchfinancebackend.config.jwt.JwtProperties;
 import com.jimmyproject.churchfinancebackend.config.jwt.JwtTokenProvider;
 import com.jimmyproject.churchfinancebackend.enums.ROLE;
 import com.jimmyproject.churchfinancebackend.user.*;
@@ -17,7 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +24,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final CustomUserDetailsService customUserDetailService;
+    private final AuthTokenService authTokenService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final JwtProperties jwtProperties;
     private final UserMapper userMapper;
 
     public LoginResponse login(LoginRequest dto){
@@ -48,24 +44,7 @@ public class AuthService {
         }
 
 
-        return generateToken(user);
-
-    }
-
-    public LoginResponse generateToken(User user) {
-        var userDetails = (UserDetails) customUserDetailService.loadUserByUsername(user.getEmail());
-        String accessToken = jwtTokenProvider.generateAccessToken(userDetails);
-        String refreshToken = jwtTokenProvider.generateRefreshToken(userDetails);
-        CustomerUserDetail principal = (CustomerUserDetail) userDetails;
-        return LoginResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .tokenType("Bearer")
-                .expiresIn(jwtProperties.getAccessExpiration())
-                .expiresAt(jwtTokenProvider.getExpirationDateFromToken(accessToken))
-                .user(userMapper.toResponse(principal.getUser()))
-                .build();
-
+        return authTokenService.generateToken(user);
     }
 
     public Long getCurrentUserId(){
@@ -100,7 +79,7 @@ public class AuthService {
 
         var savedUser =  userRepository.save(user);
 
-        return generateToken(savedUser);
+        return authTokenService.generateToken(savedUser);
     }
 
     public LoginResponse refreshToken(String refreshToken) {
@@ -112,6 +91,6 @@ public class AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        return generateToken(user);
+        return authTokenService.generateToken(user);
     }
 }

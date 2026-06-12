@@ -16,9 +16,11 @@ public class MemberService {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
     }
-    public Member getMemberByName(String name){
-        return memberRepository.findByFirstName(name)
-                .orElseThrow(() -> new MemberNotFoundException(name));
+
+    public Page<MemberResponse> searchMembers(String query, Pageable pageable) {
+        return memberRepository
+                .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(query, query, pageable)
+                .map(memberMapper::toResponse);
     }
 
     public MemberResponse createMember(MemberRequest request) {
@@ -28,6 +30,7 @@ public class MemberService {
     }
 
     public MemberResponse getMember(Long memberId) {
+
         return memberMapper.toResponse(getMemberById(memberId));
     }
 

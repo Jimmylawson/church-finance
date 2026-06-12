@@ -27,7 +27,7 @@ function HeroSection({ stats, recentRecords }: HeroSectionProps) {
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
-              to="/dashboard"
+              to="/login"
               className="rounded-full bg-[var(--color-ocean)] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(37,90,240,0.28)] transition hover:-translate-y-0.5"
             >
               Get started

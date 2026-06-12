@@ -1,5 +1,7 @@
 package com.jimmyproject.churchfinancebackend.config;
 
+import com.jimmyproject.churchfinancebackend.auth.OAuth2LoginSuccessHandler;
+import com.jimmyproject.churchfinancebackend.config.jwt.AppProperties;
 import com.jimmyproject.churchfinancebackend.config.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,11 +28,13 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final AppProperties appProperties;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .headers(headers ->headers
@@ -43,11 +47,12 @@ public class SecurityConfig {
 
 
                         )
+                    .oauth2Login(oauth2-> oauth2.successHandler(oAuth2LoginSuccessHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                         .authorizeHttpRequests(auth -> auth
                                 .requestMatchers(HttpMethod.POST, "/v1/api/users").hasRole("ADMIN")
 
-                                .requestMatchers("/v1/api/auth/login","/v1/api/auth/register","/v1/api/auth/refresh-token","/v1/api/dashboard","/v1/api/auth/logout","/oauth2/**","/login/oauth2/**").permitAll()
+                                .requestMatchers("/v1/api/auth/login","/v1/api/auth/register","/v1/api/auth/refresh-token","/v1/api/auth/logout","/oauth2/**","/login/oauth2/**").permitAll()
                                 .anyRequest().authenticated()
                         )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -57,7 +62,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList(appProperties.getFrontendUrl()));
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS"
         ));
@@ -76,6 +81,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 }
