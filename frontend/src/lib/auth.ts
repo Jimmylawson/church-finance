@@ -7,6 +7,9 @@ const authApi = axios.create({
   withCredentials: true,
 });
 
+const OAUTH_BASE_URL = SERVER_BASE_URL.replace(/\/v1\/api\/?$/, "");
+export const googleOAuthUrl = `${OAUTH_BASE_URL}/oauth2/authorize/google`;
+
 export type LoginRequest = {
   email: string;
   password: string;
