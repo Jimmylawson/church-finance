@@ -18,5 +18,20 @@ spring:
     refresh-expiration: 86400000
     issuer: finance-backend
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+              - openid
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+
+
 
 
