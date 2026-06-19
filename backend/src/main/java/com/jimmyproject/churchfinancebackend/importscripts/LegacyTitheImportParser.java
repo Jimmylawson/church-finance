@@ -17,6 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import static java.util.regex.Pattern.compile;
 
 public class LegacyTitheImportParser {
     private static final int MEMBER_NAME_COLUMN = 0;
@@ -28,6 +32,24 @@ public class LegacyTitheImportParser {
     private static final int LAST_MEMBER_ROW_INDEX = 51; // row 52
 
     private final DataFormatter dataFormatter = new DataFormatter(Locale.US);
+
+    public List<Integer> findAvailableYears(Path workbookPath) throws IOException {
+        try (InputStream inputStream = Files.newInputStream(workbookPath);
+             XSSFWorkbook workbook = new XSSFWorkbook(inputStream)) {
+
+            Set<Integer> years = new TreeSet<>();
+            for (int sheetIndex = 0; sheetIndex < workbook.getNumberOfSheets(); sheetIndex++) {
+                Sheet sheet = workbook.getSheetAt(sheetIndex);
+                try {
+                    years.add(extractYear(sheet.getSheetName()));
+                } catch (IllegalArgumentException ignored) {
+                    // Ignore non-year sheets in the workbook.
+                }
+            }
+
+            return new ArrayList<>(years);
+        }
+    }
 
     public List<ParsedContribution> parseSheetByYear(Path workbookPath, int targetYear) throws IOException {
         try (InputStream inputStream = Files.newInputStream(workbookPath);
@@ -100,7 +122,7 @@ public class LegacyTitheImportParser {
     }
 
     private int extractYear(String sheetName) {
-        var matcher = java.util.regex.Pattern.compile("(20\\d{2}|19\\d{2})").matcher(sheetName);
+        var matcher = compile("(20\\d{2}|19\\d{2})").matcher(sheetName);
         if (!matcher.find()) {
             throw new IllegalArgumentException("Could not extract year from sheet name: " + sheetName);
         }
@@ -145,7 +167,7 @@ public class LegacyTitheImportParser {
     }
 
     private int parseWeekNumber(String weekHeader) {
-        var matcher = java.util.regex.Pattern.compile("(\\d+)").matcher(weekHeader);
+        var matcher = compile("(\\d+)").matcher(weekHeader);
         if (!matcher.find()) {
             throw new IllegalArgumentException("Could not extract week number from header: " + weekHeader);
         }

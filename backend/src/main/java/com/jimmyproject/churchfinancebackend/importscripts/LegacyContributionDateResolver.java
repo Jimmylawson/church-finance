@@ -21,9 +21,8 @@ public final class LegacyContributionDateResolver {
         LocalDate resolvedDate = firstSunday.plusWeeks(weekNumber - 1L);
 
         if (resolvedDate.getMonth() != month) {
-            throw new IllegalArgumentException(
-                    "Week " + weekNumber + " does not exist as a Sunday in " + month + " " + year
-            );
+            return LocalDate.of(year, month, 1)
+                    .with(TemporalAdjusters.lastInMonth(DayOfWeek.SUNDAY));
         }
 
         return resolvedDate;

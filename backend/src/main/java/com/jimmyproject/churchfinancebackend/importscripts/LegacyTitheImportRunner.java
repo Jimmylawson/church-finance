@@ -15,7 +15,6 @@ public class LegacyTitheImportRunner {
     public static void main(String[] args) throws Exception {
         Path workbookPath = Path.of("/Users/jimmylawson/Desktop/church-finance/backend/imports/Replib Chicago Tithing Spreadsheet.xlsx");
         int yearToInspect = 2019;
-
         LegacyTitheImportParser parser = new LegacyTitheImportParser();
         List<ParsedContribution> rows = parser.parseSheetByYear(workbookPath, yearToInspect);
 
