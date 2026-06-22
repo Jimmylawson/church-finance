@@ -1,16 +1,16 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:55433/church-finance_import
+    url: jdbc:postgresql://localhost:55432/church_finance
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
 
   flyway:
-    enabled: false
+    enabled: true
 
   security:
     oauth2:

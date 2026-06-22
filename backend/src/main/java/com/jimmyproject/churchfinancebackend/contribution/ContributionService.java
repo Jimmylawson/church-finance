@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,10 @@ public class ContributionService {
     }
     public Page<ContributionResponse> getAllContributions(Pageable pageable){
         return contributionRepository.findAll(pageable).map(contributionMapper::toResponse);
+    }
+
+    public List<Integer> getAvailableYears(){
+        return contributionRepository.findAvailableYears();
     }
 
     public Page<ContributionResponse> getContributionByDateRange(LocalDate from, LocalDate to, Pageable pageable){

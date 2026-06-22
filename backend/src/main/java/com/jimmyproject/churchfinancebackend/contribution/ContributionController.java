@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/contributions")
@@ -23,6 +24,11 @@ public class ContributionController {
 
     }
 
+    @GetMapping("/years")
+    public ResponseEntity<List<Integer>> getYears(){
+        return ResponseEntity.status(HttpStatus.OK).body(contributionService.getAvailableYears());
+
+    }
     @GetMapping("/{contributionId}")
     public ResponseEntity<ContributionResponse> getContributionById(@PathVariable Long contributionId){
         return ResponseEntity.ok(contributionService.getContributionById(contributionId));

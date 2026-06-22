@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public interface ContributionRepository extends JpaRepository<Contribution, Long> {
 
@@ -23,13 +24,20 @@ public interface ContributionRepository extends JpaRepository<Contribution, Long
         
 """)
     BigDecimal getContributionsByDateRange(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
-    @Query("""
-        select coalesce(sum(c.amount), 0 ) from Contribution c
-        where  year(c.date) = :year and month(c.date) = :month
-""")
 
+    @Query("""
+    select distinct year(c.date) from Contribution c 
+    order by year(c.date) desc
+""")
+    List<Integer> findAvailableYears();
+
+    @Query("""
+    select coalesce(sum(c.amount), 0) from Contribution c
+    where year(c.date) = :year and month(c.date) = :month
+""")
     BigDecimal getContributionsByMonth(@Param("year") int year, @Param("month") int month);
     Page<Contribution> findAllByDateBetween(LocalDate from, LocalDate to, Pageable pageable);
     Page<Contribution> findAllByMemberId(Long memberId, Pageable pageable);
+
 
 }
