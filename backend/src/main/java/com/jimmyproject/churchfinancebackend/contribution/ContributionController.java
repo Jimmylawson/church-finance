@@ -45,4 +45,9 @@ public class ContributionController {
     public ResponseEntity<Page<ContributionResponse>> getContributionsByDateRange(@RequestParam LocalDate from, @RequestParam LocalDate to, @PageableDefault(size=10,sort="createdAt",direction= Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(contributionService.getContributionByDateRange(from, to, pageable));
     }
+
+    @PatchMapping("/{contributionId}")
+    public ResponseEntity<ContributionResponse> UpdateContribution(@PathVariable Long contributionId,@RequestBody UpdateContributionRequest req){
+        return ResponseEntity.ok(contributionService.updateContribution(contributionId, req));
+    }
 }
