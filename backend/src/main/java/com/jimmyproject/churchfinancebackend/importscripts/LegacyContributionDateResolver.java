@@ -10,6 +10,7 @@ public final class LegacyContributionDateResolver {
     private LegacyContributionDateResolver() {
     }
 
+
     public static LocalDate resolveContributionDate(int year, Month month, int weekNumber) {
         if (weekNumber < 1 || weekNumber > 5) {
             throw new IllegalArgumentException("Week number must be between 1 and 5. Received: " + weekNumber);

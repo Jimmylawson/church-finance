@@ -1,6 +1,7 @@
 package com.jimmyproject.churchfinancebackend.contribution;
 
 
+import com.jimmyproject.churchfinancebackend.enums.ContributionType;
 import com.jimmyproject.churchfinancebackend.member.Member;
 import com.jimmyproject.churchfinancebackend.member.MemberService;
 import jakarta.transaction.Transactional;
@@ -9,7 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +40,10 @@ public class ContributionService {
         return contributionRepository.findAll(pageable).map(contributionMapper::toResponse);
     }
 
+    public List<Integer> getAvailableYears(){
+        return contributionRepository.findAvailableYears();
+    }
+
     public Page<ContributionResponse> getContributionByDateRange(LocalDate from, LocalDate to, Pageable pageable){
         return contributionRepository.findAllByDateBetween(from, to,pageable).map(contributionMapper::toResponse);
     }
@@ -44,6 +52,32 @@ public class ContributionService {
     }
 
 
+
+    @Transactional
+    public ContributionResponse updateContribution(Long contributionId, UpdateContributionRequest req) {
+        var contribution = contributionRepository.findById(contributionId)
+                .orElseThrow(() -> new ContributionNotFoundException(contributionId));
+        if(req.amount() != null) {
+            contribution.setAmount(req.amount());
+        }
+        if (req.date() != null) {
+            contribution.setDate(req.date());
+        }
+        if (req.memberId() != null) {
+            contribution.setMember(memberService.getMemberById(req.memberId()));
+        }
+        if (req.contributionType() != null) {
+            contribution.setContributionType(req.contributionType());
+        }
+        if (req.reference() != null) {
+            contribution.setReference(req.reference());
+        }
+        if (req.description() != null) {
+            contribution.setDescription(req.description());
+        }
+
+        return contributionMapper.toResponse(contributionRepository.save(contribution));
     }
+}
 
 

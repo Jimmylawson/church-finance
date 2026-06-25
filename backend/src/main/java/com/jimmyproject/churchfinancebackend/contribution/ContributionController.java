@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/contributions")
@@ -23,6 +24,11 @@ public class ContributionController {
 
     }
 
+    @GetMapping("/years")
+    public ResponseEntity<List<Integer>> getYears(){
+        return ResponseEntity.status(HttpStatus.OK).body(contributionService.getAvailableYears());
+
+    }
     @GetMapping("/{contributionId}")
     public ResponseEntity<ContributionResponse> getContributionById(@PathVariable Long contributionId){
         return ResponseEntity.ok(contributionService.getContributionById(contributionId));
@@ -38,5 +44,10 @@ public class ContributionController {
     @GetMapping("/date-range")
     public ResponseEntity<Page<ContributionResponse>> getContributionsByDateRange(@RequestParam LocalDate from, @RequestParam LocalDate to, @PageableDefault(size=10,sort="createdAt",direction= Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(contributionService.getContributionByDateRange(from, to, pageable));
+    }
+
+    @PatchMapping("/{contributionId}")
+    public ResponseEntity<ContributionResponse> UpdateContribution(@PathVariable Long contributionId,@RequestBody UpdateContributionRequest req){
+        return ResponseEntity.ok(contributionService.updateContribution(contributionId, req));
     }
 }
