@@ -21,6 +21,26 @@ export type ContributionRequest = {
   date: string;
 };
 
+export type UpdateContributionRequest = {
+  amount?: number;
+  date?: string;
+  contributionType?: "DONATION" | "OFFERING" | "OTHER" | "TITHE";
+  memberId?: number;
+  reference?: string;
+  description?: string;
+};
+
+export const updateContribution = async (
+  contributionId: number,
+  updateContribution: UpdateContributionRequest,
+): Promise<ContributionResponse> => {
+  const response = await api.put(
+    `/contributions/${contributionId}`,
+    updateContribution,
+  );
+  return response.data;
+};
+
 export const createContribution = async (
   contributionData: ContributionRequest,
 ): Promise<ContributionResponse> => {
@@ -35,7 +55,6 @@ export const getContribution = async (
   return response.data;
 };
 
-
 export const getContributionByMemberId = async (
   memberId: number,
   page: number,
@@ -47,15 +66,27 @@ export const getContributionByMemberId = async (
   return response.data;
 };
 
-
-export const getAllContributions = async (page: number, size: number): Promise<PageResponse<ContributionResponse>> => {
+export const getAllContributions = async (
+  page: number,
+  size: number,
+): Promise<PageResponse<ContributionResponse>> => {
   const response = await api.get(`/contributions?page=${page}&size=${size}`);
   return response.data;
 };
 
-export const getContributionByDateRange = async(
-  startDate:string, endDate:string, page:number,size:number
+export const getContributionByDateRange = async (
+  startDate: string,
+  endDate: string,
+  page: number,
+  size: number,
 ): Promise<PageResponse<ContributionResponse>> => {
-  const response = await api.get(`/contributions/date-range?from=${startDate}&to=${endDate}&page=${page}&size=${size}`);
+  const response = await api.get(
+    `/contributions/date-range?from=${startDate}&to=${endDate}&page=${page}&size=${size}`,
+  );
   return response.data;
-}
+};
+
+export const getAllYears = async (): Promise<number[]> => {
+  const response = await api.get("/contributions/years");
+  return response.data;
+};

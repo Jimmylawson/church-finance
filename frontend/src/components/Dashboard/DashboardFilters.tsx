@@ -1,13 +1,32 @@
 import { Button, buttonVariants } from "@/components/ui/button";
+import DatePicker from "@/components/ui/date-picker";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { Plus, Filter } from "lucide-react";
+import { getAllYears } from "@/lib/contribution";
+import { useEffect, useState } from "react";
 
 function DashboardFilters() {
   const months = Array.from({ length: 12 }, (_, i) => ({
     value: i + 1,
     label: new Date(2000, i, 1).toLocaleString("en-US", { month: "long" }),
   }));
+  const [years, setYears] = useState<number[]>([]);
+  const [fromDate, setFromDate] = useState("2026-05-01");
+  const [toDate, setToDate] = useState("2026-05-29");
+
+  useEffect(() => {
+    const fetchYears = async () => {
+      try {
+        const yearsData = await getAllYears();
+        setYears(yearsData);
+      } catch (error) {
+        console.error("Error fetching years:", error);
+      }
+    };
+
+    fetchYears();
+  }, []);
   return (
     <section className="rounded-[28px] border border-white/70 bg-white/82 p-5 shadow-[0_24px_80px_-48px_rgba(16,35,63,0.45)] backdrop-blur dark:border-slate-800/80 dark:bg-slate-950/78 dark:shadow-[0_24px_80px_-48px_rgba(0,0,0,0.35)]">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -17,9 +36,11 @@ function DashboardFilters() {
               Year
             </span>
             <select className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-[var(--color-ocean)] focus:ring-2 focus:ring-[var(--color-ocean)]/15 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-[var(--color-ocean)]/20">
-              <option>2026</option>
-              <option>2025</option>
-              <option>2024</option>
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
             </select>
           </label>
           <label className="flex min-w-[140px] flex-col gap-2">
@@ -38,21 +59,13 @@ function DashboardFilters() {
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
               From
             </span>
-            <input
-              type="date"
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-[var(--color-ocean)] focus:ring-2 focus:ring-[var(--color-ocean)]/15 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-[var(--color-ocean)]/20"
-              defaultValue="2026-05-01"
-            />
+            <DatePicker value={fromDate} onChange={setFromDate} />
           </label>
           <label className="flex min-w-[140px] flex-col gap-2">
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
               To
             </span>
-            <input
-              type="date"
-              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 outline-none transition focus:border-[var(--color-ocean)] focus:ring-2 focus:ring-[var(--color-ocean)]/15 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-[var(--color-ocean)]/20"
-              defaultValue="2026-05-29"
-            />
+            <DatePicker value={toDate} onChange={setToDate} />
           </label>
         </div>
         <div className="flex flex-wrap items-center gap-3">

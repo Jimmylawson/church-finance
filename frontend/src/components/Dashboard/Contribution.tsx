@@ -1,12 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Search, ArrowLeft, LoaderCircle, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import DatePicker from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createContribution, type ContributionRequest } from "@/lib/contribution";
+import {
+  createContribution,
+  getContribution,
+  updateContribution,
+  type ContributionRequest,
+  type UpdateContributionRequest,
+} from "@/lib/contribution";
 import { searchMembers, type MemberResponse } from "@/lib/members";
 
 const contributionSchema = z.object({
@@ -50,12 +57,55 @@ const initialFormState: FormState = {
 
 function Contribution() {
   const navigate = useNavigate();
+  const { contributionId } = useParams();
+  const isEditMode = Boolean(contributionId);
   const [form, setForm] = useState<FormState>(initialFormState);
   const [memberOptions, setMemberOptions] = useState<MemberResponse[]>([]);
   const [searchingMembers, setSearchingMembers] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingContribution, setIsLoadingContribution] = useState(isEditMode);
+
+  useEffect(() => {
+    const parsedContributionId = Number(contributionId);
+
+    if (!isEditMode) {
+      setIsLoadingContribution(false);
+      return;
+    }
+
+    if (Number.isNaN(parsedContributionId)) {
+      setSubmitError("Invalid contribution selected for editing.");
+      setIsLoadingContribution(false);
+      return;
+    }
+
+    const loadContribution = async () => {
+      try {
+        setIsLoadingContribution(true);
+        setSubmitError(null);
+
+        const contribution = await getContribution(parsedContributionId);
+
+        setForm({
+          amount: String(contribution.amount),
+          contributionType: contribution.contributionType as ContributionRequest["contributionType"],
+          memberId: contribution.memberId,
+          memberQuery: contribution.memberFullName,
+          reference: contribution.reference,
+          description: contribution.description ?? "",
+          date: contribution.date,
+        });
+      } catch {
+        setSubmitError("Unable to load the contribution for editing.");
+      } finally {
+        setIsLoadingContribution(false);
+      }
+    };
+
+    loadContribution();
+  }, [contributionId, isEditMode]);
 
   useEffect(() => {
     const trimmedQuery = form.memberQuery.trim();
@@ -142,13 +192,37 @@ function Contribution() {
       setIsSubmitting(true);
       setSubmitError(null);
 
-      await createContribution(result.data as ContributionRequest);
-      navigate("/dashboard");
+      if (isEditMode) {
+        await updateContribution(
+          Number(contributionId),
+          result.data as UpdateContributionRequest,
+        );
+      } else {
+        await createContribution(result.data as ContributionRequest);
+      }
+
+      navigate(
+        form.memberId !== null
+          ? `/members/${form.memberId}/contributions`
+          : "/dashboard",
+      );
     } catch {
-      setSubmitError("Unable to save contribution right now. Try again.");
+      setSubmitError(
+        isEditMode
+          ? "Unable to update contribution right now. Try again."
+          : "Unable to save contribution right now. Try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleBack = () => {
+    navigate(
+      form.memberId !== null
+        ? `/members/${form.memberId}/contributions`
+        : "/dashboard",
+    );
   };
 
   return (
@@ -160,20 +234,21 @@ function Contribution() {
               Ledgerly Admin
             </p>
             <h1 className="font-display text-4xl font-black tracking-tight text-slate-950 dark:text-slate-50 sm:text-5xl">
-              Record contribution
+              {isEditMode ? "Edit contribution" : "Record contribution"}
             </h1>
             <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">
-              Search for a member, select the right person, and save the contribution
-              against that exact member record.
+              {isEditMode
+                ? "Correct contribution details without deleting the original record."
+                : "Search for a member, select the right person, and save the contribution against that exact member record."}
             </p>
           </div>
           <Button
             variant="outline"
-            onClick={() => navigate("/dashboard")}
+            onClick={handleBack}
             className="rounded-2xl border-slate-200 bg-white px-5 py-6 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to dashboard
+            {form.memberId !== null ? "Back to member profile" : "Back to dashboard"}
           </Button>
         </div>
 
@@ -183,10 +258,15 @@ function Contribution() {
               Contribution Form
             </CardDescription>
             <CardTitle className="text-2xl font-black tracking-tight text-slate-950 dark:text-slate-100">
-              Add a new contribution
+              {isEditMode ? "Update contribution" : "Add a new contribution"}
             </CardTitle>
           </CardHeader>
           <CardContent>
+            {isLoadingContribution ? (
+              <div className="py-8 text-sm text-slate-500 dark:text-slate-400">
+                Loading contribution...
+              </div>
+            ) : (
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid gap-5 md:grid-cols-2">
                 <div className="space-y-2 md:col-span-2">
@@ -293,12 +373,9 @@ function Contribution() {
 
                 <div className="space-y-2">
                   <Label htmlFor="date">Date</Label>
-                  <Input
-                    id="date"
-                    type="date"
+                  <DatePicker
                     value={form.date}
-                    onChange={(event) => handleFieldChange("date", event.target.value)}
-                    className="rounded-2xl border-slate-200 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+                    onChange={(value) => handleFieldChange("date", value)}
                   />
                   {errors.date && (
                     <p className="text-sm text-red-600 dark:text-red-400">{errors.date}</p>
@@ -326,27 +403,28 @@ function Contribution() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => navigate("/dashboard")}
+                  onClick={handleBack}
                   className="rounded-2xl border-slate-200 bg-white px-5 py-6 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isLoadingContribution}
                   className="rounded-2xl bg-[var(--color-ocean)] px-5 py-6 text-white hover:bg-[color-mix(in_srgb,var(--color-ocean),black_10%)]"
                 >
                   {isSubmitting ? (
                     <>
                       <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                      Saving...
+                      {isEditMode ? "Updating..." : "Saving..."}
                     </>
                   ) : (
-                    "Save contribution"
+                    isEditMode ? "Update contribution" : "Save contribution"
                   )}
                 </Button>
               </div>
             </form>
+            )}
           </CardContent>
         </Card>
       </div>
